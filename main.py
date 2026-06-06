@@ -40,7 +40,6 @@ def analyze_stock(df):
     
     rsi = ta.momentum.RSIIndicator(close=close, window=14).rsi().iloc[-1]
     
-    # Tính toán đơn giản cho tín hiệu
     trend = "Uptrend" if close.iloc[-1] > close.iloc[-5] else "Downtrend"
     status = "Quá bán" if rsi < 30 else ("Quá mua" if rsi > 70 else "Bình thường")
     
@@ -56,7 +55,6 @@ async def handle_message(message: types.Message):
     wait_msg = await message.reply(f"🔄 Đang phân tích {symbol}...")
     
     try:
-        # Lấy dữ liệu
         df = vnstock.stock(symbol=symbol, source="VCI").quote.history(start="2026-01-01", end="2026-12-31", interval="1D")
         if df is None or df.empty:
             await bot.edit_message_text("❌ Không có dữ liệu.", chat_id=message.chat.id, message_id=wait_msg.message_id)
@@ -76,11 +74,11 @@ async def handle_message(message: types.Message):
         
         await bot.edit_message_text(result, chat_id=message.chat.id, message_id=wait_msg.message_id, parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
-        await bot.edit_message_text("❌ Lỗi hệ thống.", chat_id=message.chat.id, message_id=wait_msg.message_id)
+        await bot.edit_message_text("❌ Lỗi hệ thống, thử lại sau...", chat_id=message.chat.id, message_id=wait_msg.message_id)
 
 async def main():
-    print("🤖 BOT ĐÃ ONLINE...")
-    # Dòng này quan trọng nhất: skip_updates=True xóa bỏ mọi xung đột tin nhắn cũ
+    print("🤖 BOT ĐÃ ONLINE SẴN SÀNG...")
+    # Dòng này là chìa khóa: skip_updates=True xóa bỏ mọi xung đột tin nhắn cũ bị treo
     await dp.start_polling(bot, skip_updates=True)
 
 if __name__ == '__main__':
