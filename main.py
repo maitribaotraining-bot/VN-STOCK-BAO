@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from vnstock import Vnstock
+from vnstock import vnstock
 import pandas as pd
 import ta
 import numpy as np
@@ -12,7 +12,6 @@ import time
 # ====================================
 # CONFIG BOT TELEGRAM (FAQ FOR CLIENTS)
 # ====================================
-# Thay bằng Token chuẩn của anh lấy từ @BotFather nếu cần nhé anh
 BOT_TOKEN = "8937864972:AAGOMsxZOG7s6bKVW1al93ahQcfWU3lUYUg"
 
 # Khởi tạo Bot và Dispatcher chuẩn Async
@@ -21,7 +20,8 @@ dp = Dispatcher(storage=MemoryStorage())
 
 def get_news_sentiment(symbol):
     try:
-        stock = Vnstock().stock(symbol=symbol, source="VCI")
+        # Đồng bộ cú pháp vnstock viết thường bản mới nhất
+        stock = vnstock().stock(symbol=symbol, source="VCI")
         df_news = stock.company.news()
         if df_news is None or df_news.empty:
             return "Trung lập", "Không có tin tức mới nổi bật"
@@ -71,7 +71,7 @@ def analyze_multi_timeframe(df):
     
     status_1d = "Quá bán" if latest_rsi < 30 else ("Tín hiệu đáy" if latest_k < 20 and latest_k > latest_d else "Bình thường")
 
-    # Mô phỏng hành vi
+    # Mô phỏng hành vi hành động giá
     match_count, success_count = 0, 0
     for i in range(50, len(df_daily) - 5):
         if abs(rsi_series.iloc[i] - latest_rsi) < 5 and abs(banker_series[i] - latest_banker) < 10:
@@ -96,7 +96,8 @@ async def reply_stock_analysis(message: types.Message):
 
     try:
         loop = asyncio.get_event_loop()
-        stock = Vnstock().stock(symbol=symbol, source="VCI")
+        # Đồng bộ cú pháp vnstock viết thường bản mới nhất
+        stock = vnstock().stock(symbol=symbol, source="VCI")
         df = await loop.run_in_executor(None, lambda: stock.quote.history(start="2023-01-01", end="2026-12-31", interval="1D"))
         
         if df is None or len(df) < 100:
