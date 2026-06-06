@@ -4,12 +4,3 @@ pandas
 ta
 numpy
 requests
-beautifulsoup4
-plotly
-lxml
-openpyxl
-httpx
-pydantic
-pydantic-core
-certifi
-urllib3
