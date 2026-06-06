@@ -1,0 +1,7 @@
+aiogram==3.13.1
+vnstock==0.2.8.7
+pandas
+ta
+numpy
+requests
+
