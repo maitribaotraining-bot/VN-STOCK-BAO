@@ -1,7 +1,7 @@
 aiogram==3.13.1
-vnstock==0.2.8.7
+vnstock==0.2.2
 pandas
 ta
 numpy
 requests
-
+beautifulsoup4
