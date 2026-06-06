@@ -1,5 +1,5 @@
 aiogram==3.13.1
-vnstock==0.2.2
+vnstock
 pandas
 ta
 numpy
