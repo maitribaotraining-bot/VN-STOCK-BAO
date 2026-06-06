@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from vnstock import vnstock
+import vnstock  # Gọi trực tiếp thư viện vnstock chuẩn mới
 import pandas as pd
 import ta
 import numpy as np
@@ -20,8 +20,8 @@ dp = Dispatcher(storage=MemoryStorage())
 
 def get_news_sentiment(symbol):
     try:
-        # Đồng bộ cú pháp vnstock viết thường bản mới nhất
-        stock = vnstock().stock(symbol=symbol, source="VCI")
+        # Cú pháp vnstock gọi trực tiếp từ bản mới nhất không dùng dấu ngoặc () ở đầu
+        stock = vnstock.stock(symbol=symbol, source="VCI")
         df_news = stock.company.news()
         if df_news is None or df_news.empty:
             return "Trung lập", "Không có tin tức mới nổi bật"
@@ -96,8 +96,8 @@ async def reply_stock_analysis(message: types.Message):
 
     try:
         loop = asyncio.get_event_loop()
-        # Đồng bộ cú pháp vnstock viết thường bản mới nhất
-        stock = vnstock().stock(symbol=symbol, source="VCI")
+        # Cú pháp vnstock gọi trực tiếp từ bản mới nhất không dùng dấu ngoặc () ở đầu
+        stock = vnstock.stock(symbol=symbol, source="VCI")
         df = await loop.run_in_executor(None, lambda: stock.quote.history(start="2023-01-01", end="2026-12-31", interval="1D"))
         
         if df is None or len(df) < 100:
