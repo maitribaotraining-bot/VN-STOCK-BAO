@@ -3,4 +3,3 @@ vnstock
 pandas
 ta
 numpy
-requests
